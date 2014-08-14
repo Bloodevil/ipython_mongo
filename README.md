@@ -35,11 +35,9 @@ Out[10]:
 [u'local',
  u'tumblr',
  u'admin',
- u'kobis',
  u'movie',
  u'theater',
  u'a',
- u'cine_db',
  u'daa',
  u'dbs',
  u'test']
