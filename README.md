@@ -15,7 +15,7 @@ import error when load_ext
 Usage
 =============
 
-%mongo_connect <mongodb://localhost:27017>
+%mongo_connect [mongodb://localhost:27017]
 ===
 ```sql
 In [1]: con = %mongo_connect
@@ -43,7 +43,7 @@ Out[10]:
  u'test']
 ```
 
-%show_collections
+%show_collections [dbname]
 ===
 ```sql
 In [11]: %show_collections movie
