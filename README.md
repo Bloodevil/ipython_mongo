@@ -16,7 +16,6 @@ Usage
 =============
 
 %mongo_connect [mongodb://localhost:27017]
-===
 ```sql
 In [1]: con = %mongo_connect
 
@@ -28,7 +27,6 @@ Out[3]: MongoClient(u'127.0.0.1', 27017)
 ```
 
 %show_dbs
-===
 ```sql
 In [10]: %show_dbs
 Out[10]: 
@@ -44,7 +42,6 @@ Out[10]:
 ```
 
 %show_collections [dbname]
-===
 ```sql
 In [11]: %show_collections movie
 Out[11]: [u'system.indexes', u'kobis']
