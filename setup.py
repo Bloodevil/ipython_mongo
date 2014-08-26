@@ -5,7 +5,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.md')).read()
 NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 
-version = '0.1.0'
+version = '0.1.1'
 
 install_requires = [
     'ipython>=1.0',
@@ -29,7 +29,7 @@ setup(name='ipython-mongo',
     url='https://github.com/Bloodevil/ipython_mongo',
     download_url='https://github.com/Bloodevil/ipython_mongo/tarball/0.1',
     license='MIT',
-    py_modules=['soup']
+    py_modules=['imongo'],
     zip_safe=False,
     install_requires=install_requires,
 )
