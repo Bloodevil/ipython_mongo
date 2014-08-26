@@ -1,0 +1,10 @@
+News
+====
+
+0.1
+---
+
+*Release date: 26-Aug-2014*
+
+* Initial release
+* Release to PyPI
