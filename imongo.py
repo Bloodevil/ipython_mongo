@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from pymongo.database import Database
 from IPython.core.magic import Magics, magics_class, line_cell_magic, line_magic
+from helps import DB_METHODS
 
 @magics_class
 class MongoDB(Magics):
@@ -34,6 +35,21 @@ class MongoDB(Magics):
             print "[ERROR] check your database name there no collection"
             collections = self.show_dbs(self)
         return collections
+
+    @line_magic('help')
+    def help_message(self, line):
+        message = ''
+        if line == 'db':
+            message += DB_METHODS
+        else:
+            message += """
+                %help db             help on db methods
+                %help collection     help on collection methods
+
+                %show_dbs            show database names
+                %show_collections    show collections in current database
+            """
+        print message
 
 def load_ipython_extension(ipython):
     ipython.register_magics(MongoDB)
