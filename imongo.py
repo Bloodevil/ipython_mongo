@@ -1,13 +1,25 @@
 from pymongo import MongoClient
 from pymongo.database import Database
 from IPython.core.magic import Magics, magics_class, line_cell_magic, line_magic
+from IPython.config.configurable import Configurable
 from helps import DB_METHODS
 
 @magics_class
-class MongoDB(Magics):
+class MongoDB(Magics, Configurable):
     _conn = None
+
+    def __init__(self, shell):
+        Configurable.__init__(self, config=shell.config)
+        Magics.__init__(self, shell=shell)
+        self.shell.configurables.append(self)
+
     @line_magic('mongo_connect')
     def conn(self, line):
+        """Conenct to mongo database in ipython shell.
+        Examples::
+            %mongo_connect
+            %mongo_connect mongodb://hostname:port
+        """
         if line:
             uri = line
         else:
