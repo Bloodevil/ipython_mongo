@@ -6,6 +6,11 @@ In [1]: %install_ext https://github.com/Bloodevil/ipython_mongo/edit/master/imon
 In [2]: %load_ext imongo.py
 ```
 
+```sql
+pip install ipython_mongo
+In [1]: %load_ext imongo
+```
+
 import error when load_ext
 =============
 
