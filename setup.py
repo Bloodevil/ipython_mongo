@@ -1,11 +1,14 @@
-from setuptools import setup, find_packages
 import os
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.md')).read()
 NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 
-version = '0.1.1'
+version = '0.1.2'
 
 install_requires = [
     'ipython>=1.0',
@@ -27,7 +30,7 @@ setup(name='ipython-mongo',
     author='Yeaji Shin',
     author_email='yeahjishin@gmail.com',
     url='https://github.com/Bloodevil/ipython_mongo',
-    download_url='https://github.com/Bloodevil/ipython_mongo/tarball/0.1',
+    download_url='https://github.com/Bloodevil/ipython_mongo/tarball/0.1.2',
     license='MIT',
     py_modules=['imongo'],
     zip_safe=False,
