@@ -44,3 +44,6 @@ DB_METHODS = """
     db.stats()
     db.version() current version of the server
 """
+
+COLLECTION_METHODS = ""
+"""

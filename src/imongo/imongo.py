@@ -53,13 +53,16 @@ class MongoDB(Magics, Configurable):
         message = ''
         if line == 'db':
             message += DB_METHODS
+        else if line == 'collection':
+            message += COLLECTION_METHODS
         else:
             message += """
                 %help db             help on db methods
                 %help collection     help on collection methods
 
-                %show_dbs            show database names
-                %show_collections    show collections in current database
+                %mongo_connect <host>       connect to <host> mongodb
+                %show_dbs                   show database names
+                %show_collections <dbname>  show collections on <dbname>
             """
         print message
 
