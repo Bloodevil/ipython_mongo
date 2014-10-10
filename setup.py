@@ -1,21 +1,29 @@
 import os
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
-    from distutils.core import setup
+    from distutils.core import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.md')).read()
-NEWS = open(os.path.join(here, 'NEWS.txt')).read()
+try:
+    README = open(os.path.join(here, 'README.rst')).read()
+    NEWS = open(os.path.join(here, 'NEWS.txt')).read()
+except:
+    README = 'https://github.com/Bloodevil/ipython_mongo/blob/master/README.md'
+    NEWS = 'https://github.com/Bloodevil/ipython_mongo/blob/master/NEWS.txt'
 
-version = '0.1.2'
+version = '0.1.3'
 
 install_requires = [
     'ipython>=1.0',
+    'pymongo>=2.7',
 ]
 
 setup(name='ipython-mongo',
     version=version,
+    packages=find_packages('src'),
+    package_dir = {'': 'src'},
+    include_package_data=True,
     description="MONGODB access via IPython",
     long_description=README + '\n\n' + NEWS,
     classifiers=[
@@ -26,7 +34,7 @@ setup(name='ipython-mongo',
         'Topic :: Database :: Front-Ends',
         'Programming Language :: Python :: 2',
     ],
-    keywords='database ipython mongodb shell',
+    keywords=['database', 'ipython', 'mongodb', 'shell'],
     author='Yeaji Shin',
     author_email='yeahjishin@gmail.com',
     url='https://github.com/Bloodevil/ipython_mongo',
