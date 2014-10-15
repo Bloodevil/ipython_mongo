@@ -53,7 +53,7 @@ class MongoDB(Magics, Configurable):
         message = ''
         if line == 'db':
             message += DB_METHODS
-        else if line == 'collection':
+        elif line == 'collection':
             message += COLLECTION_METHODS
         else:
             message += """

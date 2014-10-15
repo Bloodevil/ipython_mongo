@@ -45,5 +45,5 @@ DB_METHODS = """
     db.version() current version of the server
 """
 
-COLLECTION_METHODS = ""
+COLLECTION_METHODS = """
 """
