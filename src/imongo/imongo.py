@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from pymongo.database import Database
+from pymongo.collection import Collection
 from IPython.core.magic import Magics, magics_class, line_cell_magic, line_magic
 from IPython.config.configurable import Configurable
 from helps import DB_METHODS
@@ -25,6 +26,14 @@ class MongoDB(Magics, Configurable):
         else:
             uri = 'mongodb://localhost:27017'
         self._conn = MongoClient(uri)
+        # add db and collection property to object for autocomplete.
+        for db in self._conn.database_names():
+            setattr(self._conn, db, Database(self._conn, db))
+            _db = Database(self._conn, db)
+            for collection in _db.collection_names():
+                # [TODO] change eval to other!!
+                setattr(eval('self._conn.'+db), collection,
+                        Collection(_db, collection))
         return self._conn
 
     @line_magic('show_dbs')
