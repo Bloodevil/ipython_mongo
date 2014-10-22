@@ -6,7 +6,7 @@ except ImportError:
 
 here = os.path.abspath(os.path.dirname(__file__))
 try:
-    README = open(os.path.join(here, 'README.rst')).read()
+    README = open(os.path.join(here, 'README.md')).read()
     NEWS = open(os.path.join(here, 'NEWS.txt')).read()
 except:
     README = 'https://github.com/Bloodevil/ipython_mongo/blob/master/README.md'
