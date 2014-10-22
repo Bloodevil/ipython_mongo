@@ -12,7 +12,7 @@ except:
     README = 'https://github.com/Bloodevil/ipython_mongo/blob/master/README.md'
     NEWS = 'https://github.com/Bloodevil/ipython_mongo/blob/master/NEWS.txt'
 
-version = '0.1.3'
+version = '0.2.0'
 
 install_requires = [
     'ipython>=1.0',

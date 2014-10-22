@@ -1,9 +1,10 @@
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.collection import Collection
-from IPython.core.magic import Magics, magics_class, line_cell_magic, line_magic
+from IPython.core.magic import Magics, magics_class, cell_magic, line_magic, needs_local_scope
 from IPython.config.configurable import Configurable
 from helps import DB_METHODS
+from parse import parse
 
 @magics_class
 class MongoDB(Magics, Configurable):
@@ -57,6 +58,18 @@ class MongoDB(Magics, Configurable):
             collections = self.show_dbs(self)
         return collections
 
+    @needs_local_scope
+    @line_magic('insert')
+    @cell_magic('insert')
+    def insert(self, line, cell='', local_ns={}):
+        if not self._conn:
+            return "[ERROR] connect mongodb before %insert"
+        parsed = parse('%s\n%s' % (line, cell), self)
+        try:
+            parsed['collection'].insert(json.loads(parsed['data']))
+        except:
+            return "[ERROR] fail to insert data"
+
     @line_magic('help')
     def help_message(self, line):
         message = ''
@@ -72,6 +85,11 @@ class MongoDB(Magics, Configurable):
                 %mongo_connect <host>       connect to <host> mongodb
                 %show_dbs                   show database names
                 %show_collections <dbname>  show collections on <dbname>
+                %insert <dbname>.<collection name> {json data}
+                                            insert data to db.collection
+                %%insert <dbname>.<collection name>
+                {json data} or {json data list}
+                                            insert data to db.collection
             """
         print message
 
