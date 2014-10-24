@@ -1,6 +1,11 @@
 ipython mongo magic
 =============
 
+:Info: ipython mongo shell extension
+:Author: Yeaji Shin ( yeahjishin@gmailc.om )
+
+
+
 ```sql
 In [1]: %install_ext https://github.com/Bloodevil/ipython_mongo/edit/master/imongo.py
 In [2]: %load_ext imongo.py
@@ -52,5 +57,12 @@ In [11]: %show_collections movie
 Out[11]: [u'system.indexes', u'kobis']
 ```
 
+%insert db.collection {data}
+```sql
+In [29]: %insert test.test {"test": "test1"}
+{u'test': u'test1'}
 
+In [31]: conn.test.test.find_one()
+Out[31]: {u'_id': ObjectId('544a20e5eb5e7b1ccdb7ca54'), u'test': u'test'}
+```
 

@@ -3,8 +3,9 @@ from pymongo.database import Database
 from pymongo.collection import Collection
 from IPython.core.magic import Magics, magics_class, cell_magic, line_magic, needs_local_scope
 from IPython.config.configurable import Configurable
-from helps import DB_METHODS
+from helps import *
 from parse import parse
+import json
 
 @magics_class
 class MongoDB(Magics, Configurable):
@@ -66,9 +67,10 @@ class MongoDB(Magics, Configurable):
             return "[ERROR] connect mongodb before %insert"
         parsed = parse('%s\n%s' % (line, cell), self)
         try:
-            parsed['collection'].insert(json.loads(parsed['data']))
-        except:
-            return "[ERROR] fail to insert data"
+            data = json.loads(parsed['data'])
+            parsed['collection'].insert(data)
+        except Exception as e:
+            return "[ERROR] fail to insert data %s", e
 
     @line_magic('help')
     def help_message(self, line):
@@ -78,19 +80,7 @@ class MongoDB(Magics, Configurable):
         elif line == 'collection':
             message += COLLECTION_METHODS
         else:
-            message += """
-                %help db             help on db methods
-                %help collection     help on collection methods
-
-                %mongo_connect <host>       connect to <host> mongodb
-                %show_dbs                   show database names
-                %show_collections <dbname>  show collections on <dbname>
-                %insert <dbname>.<collection name> {json data}
-                                            insert data to db.collection
-                %%insert <dbname>.<collection name>
-                {json data} or {json data list}
-                                            insert data to db.collection
-            """
+            message += HELP_MESSAGE
         print message
 
 def load_ipython_extension(ipython):

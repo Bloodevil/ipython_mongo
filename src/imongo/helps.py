@@ -1,3 +1,17 @@
+HELP_MESSAGE = """
+    %help db             help on db methods
+    %help collection     help on collection methods
+
+    %mongo_connect <host>       connect to <host> mongodb
+    %show_dbs                   show database names
+    %show_collections <dbname>  show collections on <dbname>
+    %insert <dbname>.<collection name> {json data}
+                                insert data to db.collection
+    %%insert <dbname>.<collection name>
+    {json data} or {json data list}
+                                insert data to db.collection
+"""
+
 DB_METHODS = """
     db.addUser(userDocument)
     db.adminCommand(nameOrDocument) - switches to 'admin' db, and runs command [ just calls db.runCommand(...) ]
