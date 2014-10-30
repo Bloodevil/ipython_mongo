@@ -1,20 +1,25 @@
 ipython mongo magic
 =============
 
-:Info: ipython mongo shell extension
-:Author: Yeaji Shin ( yeahjishin@gmailc.om )
+    :Info: ipython mongo shell extension
+    :Author: Yeaji Shin ( yeahjishin@gmail.com )
 
 
+Install
+=======
 
-```sql
-In [1]: %install_ext https://github.com/Bloodevil/ipython_mongo/edit/master/imongo.py
-In [2]: %load_ext imongo.py
-```
+use github:
+    In [1]: %install_ext https://github.com/Bloodevil/ipython_mongo/edit/master/imongo.py
+    In [2]: %load_ext imongo.py
 
-```sql
-pip install ipython_mongo
-In [1]: %load_ext imongo
-```
+    git clone https://github.com/Bloodevil/ipython_mongo.git
+    cd ipython_mongo
+    python setup.py install
+
+use pip:
+
+    pip install ipython_mongo
+    In [1]: %load_ext imongo
 
 import error when load_ext
 =============
