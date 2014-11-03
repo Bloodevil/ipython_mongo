@@ -8,3 +8,11 @@ News
 
 * Initial release
 * Release to PyPI
+
+0.2
+---
+
+*Release date: 22-Oct-2014*
+
+* #7 new way to make autocomplete.
+* #9 insert data
