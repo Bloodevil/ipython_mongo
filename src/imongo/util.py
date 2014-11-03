@@ -20,3 +20,6 @@ def parse(cell, config):
     _col = Collection(_db, col)
     data = parts[1] if len(parts) > 1 else ''
     return {'collection': _col, 'data' : data.strip()}
+
+def mongo_print():
+    return None

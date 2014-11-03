@@ -4,7 +4,7 @@ from pymongo.collection import Collection
 from IPython.core.magic import Magics, magics_class, cell_magic, line_magic, needs_local_scope
 from IPython.config.configurable import Configurable
 from helps import *
-from parse import parse
+from util import parse, mongo_print
 import json
 
 @magics_class
@@ -71,6 +71,18 @@ class MongoDB(Magics, Configurable):
             parsed['collection'].insert(data)
         except Exception as e:
             return "[ERROR] fail to insert data %s", e
+
+    @line_magic('print')
+    @cell_magic('print')
+    def mongo_print(self, line, cell=''):
+        if not self._conn:
+            return "[ERROR] connect mongodb before %insert"
+        parsed = parse('%s\n%s' % (line, cell), self)
+        # print db.collection.find()
+        try:
+            result = mongo_print(parsed['data'])
+        except Exception as e:
+            return "[ERROR] fail to print about %s", parsed['data']
 
     @line_magic('help')
     def help_message(self, line):
