@@ -1,9 +1,10 @@
+<img src="https://travis-ci.org/Bloodevil/ipython_mongo.svg?branch=master"/>
+
 ipython mongo magic
 =============
 
     :Info: ipython mongo shell extension
     :Author: Yeaji Shin ( yeahjishin@gmail.com )
-
 
 Install
 =======
