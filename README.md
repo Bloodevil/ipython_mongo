@@ -9,6 +9,7 @@ Install
 =======
 
 use github:
+
     In [1]: %install_ext https://github.com/Bloodevil/ipython_mongo/edit/master/imongo.py
     In [2]: %load_ext imongo.py
 
