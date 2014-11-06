@@ -4,7 +4,7 @@ from pymongo.collection import Collection
 from IPython.core.magic import Magics, magics_class, cell_magic, line_magic, needs_local_scope
 from IPython.config.configurable import Configurable
 from helps import *
-from util import parse, mongo_print
+from util import parse, print_json
 import json
 
 @magics_class
@@ -80,7 +80,7 @@ class MongoDB(Magics, Configurable):
         parsed = parse('%s\n%s' % (line, cell), self)
         # print db.collection.find()
         try:
-            result = mongo_print(parsed['data'])
+            result = print_json(parsed['data'])
         except Exception as e:
             return "[ERROR] fail to print about %s", parsed['data']
 

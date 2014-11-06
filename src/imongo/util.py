@@ -21,5 +21,8 @@ def parse(cell, config):
     data = parts[1] if len(parts) > 1 else ''
     return {'collection': _col, 'data' : data.strip()}
 
-def mongo_print():
+def print_json():
+    return None
+
+def print_mongo_cursor():
     return None
