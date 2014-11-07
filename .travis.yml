@@ -7,5 +7,4 @@ install:
   # Get fab to test fab
   - pip install -e .
 
-notifications:
-  email: true
+script: nosetests
