@@ -1,3 +1,4 @@
+from IPython import get_ipython
 from imongo.imongo import MongoDB
 
 ip = get_ipython()
