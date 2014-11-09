@@ -43,8 +43,7 @@ class MongoDB(Magics, Configurable):
         if self._conn:
             return self._conn.database_names()
         else:
-            print "[ERROR] please connect to mongodb using %mongo_connect"
-            return line
+            return "[ERROR] please connect to mongodb using %mongo_connect"
 
     @line_magic('show_collections')
     def show_collections(self, line):
@@ -67,16 +66,30 @@ class MongoDB(Magics, Configurable):
             return "[ERROR] connect mongodb before %insert"
         parsed = parse('%s\n%s' % (line, cell), self)
         try:
-            data = json.loads(parsed['data'])
+            data = json.loads(parsed['data']) # [TODO] single quota
             parsed['collection'].insert(data)
         except Exception as e:
             return "[ERROR] fail to insert data %s", e
+
+    @line_magic('delete')
+    def delete(self, line):
+        if not self._conn:
+            return "[ERROR] connect mongodb before %delete"
+        if not line:
+            return "[ERROR] please use like %delete db.collection or %delete db"
+        db_col = line.split('.')
+        if db_col.__len__() > 2:
+            return "[ERROR] please use like %delete db.collection or %delete db"
+        elif db_col.__len__() == 2:
+            Database(self._conn, db_col[0]).drop_collection(db_col[1])
+        else:
+            self._conn.drop_database(db_col[0])
 
     @line_magic('print')
     @cell_magic('print')
     def mongo_print(self, line, cell=''):
         if not self._conn:
-            return "[ERROR] connect mongodb before %insert"
+            return "[ERROR] connect mongodb before %print"
         parsed = parse('%s\n%s' % (line, cell), self)
         # print db.collection.find()
         try:
