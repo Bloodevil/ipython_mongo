@@ -12,11 +12,11 @@ def test_magic_find():
     assert ip.find_line_magic('show_dbs') != None
     assert ip.find_line_magic('show_collections') != None
     assert ip.find_line_magic('help') != None
-    assert ip.find_line_magic('print') != None
+    #assert ip.find_line_magic('print') != None
     assert ip.find_line_magic('insert') != None
 
 def test_magic_not_found():
-    assert ip.find_line_magic('test') != None
+    assert ip.find_line_magic('test') == None
 
 def test_show_dbs_error():
     assert ip.run_line_magic('show_dbs', '') == "[ERROR] please connect to mongodb using %mongo_connect"
@@ -32,16 +32,16 @@ def test_print_error():
     assert ip.run_line_magic('print', '') == '[ERROR] connect mongodb before %print'
 
 def _init():
-    ip.run_line_magic('mongo_connect')
+    ip.run_line_magic('mongo_connect', 'mongodb.bloodevil.com')
     ip.run_line_magic('insert', "ipython.test {'test': 1}")
 
 def _teardown():
-    ip.run_cell("conn = %mongo_connect")
+    ip.run_cell("conn = %mongo_connect mongodb.bloodevil.com")
     ip.runcode("conn.ipython.test.drop()")
     #ip.run_line_magic('delete', "ipython.test")
 
 @with_setup(_init, _teardown)
 def test_show_dbs():
-    assert 'test' in ip.run_line_magic('show_dbs', '')
+    assert 'ipython' in ip.run_line_magic('show_dbs', '')
 
 
