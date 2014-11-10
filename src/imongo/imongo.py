@@ -71,8 +71,8 @@ class MongoDB(Magics, Configurable):
         except Exception as e:
             return "[ERROR] fail to insert data %s", e
 
-    @line_magic('delete')
-    def delete(self, line):
+    @line_magic('drop')
+    def drop(self, line):
         if not self._conn:
             return "[ERROR] connect mongodb before %delete"
         if not line:

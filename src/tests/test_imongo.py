@@ -38,7 +38,7 @@ def _init():
 def _teardown():
     ip.run_cell("conn = %mongo_connect mongodb.bloodevil.com")
     ip.runcode("conn.ipython.test.drop()")
-    #ip.run_line_magic('delete', "ipython.test")
+    ip.run_line_magic('drop', "ipython")
 
 @with_setup(_init, _teardown)
 def test_show_dbs():
