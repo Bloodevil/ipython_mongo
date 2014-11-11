@@ -4,6 +4,7 @@ python:
 install:
   # Build/test dependencies
   - pip install -r ./requirements.txt
-
+services:
+  - mongodb
 script:
   - ipython -c "import nose; nose.run()"

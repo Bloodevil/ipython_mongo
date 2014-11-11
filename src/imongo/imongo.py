@@ -4,8 +4,9 @@ from pymongo.collection import Collection
 from IPython.core.magic import Magics, magics_class, cell_magic, line_magic, needs_local_scope
 from IPython.config.configurable import Configurable
 from helps import *
-from util import parse, print_json
+from util import parse, print_json, print_cursor, query_pymongo
 import json
+
 
 @magics_class
 class MongoDB(Magics, Configurable):
@@ -26,7 +27,7 @@ class MongoDB(Magics, Configurable):
         if line:
             uri = line
         else:
-            uri = 'mongodb://localhost:27017'
+            uri = 'mongodb://127.0.0.1:27017'
         self._conn = MongoClient(uri)
         # add db and collection property to object for autocomplete.
         for db in self._conn.database_names():
@@ -66,10 +67,10 @@ class MongoDB(Magics, Configurable):
             return "[ERROR] connect mongodb before %insert"
         parsed = parse('%s\n%s' % (line, cell), self)
         try:
-            data = json.loads(parsed['data']) # [TODO] single quota
+            data = json.loads(parsed['data'])  # [TODO] single quota
             parsed['collection'].insert(data)
         except Exception as e:
-            return "[ERROR] fail to insert data %s", e
+            return "[ERROR] fail to insert data", e
 
     @line_magic('drop')
     def drop(self, line):
@@ -94,8 +95,20 @@ class MongoDB(Magics, Configurable):
         # print db.collection.find()
         try:
             result = print_json(parsed['data'])
+        except Exception:
+            return "[ERROR] fail to print about", parsed['data']
+
+    @line_magic('find')
+    @cell_magic('find')
+    def mongo_find(self, line, cell=''):
+        if not self._conn:
+            return "[ERROR] connect mongodb before %find"
+        parsed = parse('%s\n%s' % (line, cell), self)
+        try:
+            query = query_pymongo(parsed['data'])
+            return print_cursor(parsed['collection'].find(json.loads(query.replace("'",'"'))))
         except Exception as e:
-            return "[ERROR] fail to print about %s", parsed['data']
+            return "[ERROR] fail to query ", e
 
     @line_magic('help')
     def help_message(self, line):
@@ -108,6 +121,6 @@ class MongoDB(Magics, Configurable):
             message += HELP_MESSAGE
         print message
 
+
 def load_ipython_extension(ipython):
     ipython.register_magics(MongoDB)
-
