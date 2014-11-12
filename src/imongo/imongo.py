@@ -4,8 +4,7 @@ from pymongo.collection import Collection
 from IPython.core.magic import Magics, magics_class, cell_magic, line_magic, needs_local_scope
 from IPython.config.configurable import Configurable
 from helps import *
-from util import parse, print_json, print_cursor, query_pymongo
-import json
+from util import parse, print_json, print_cursor, find_query_pymongo, insert_query_pymongo
 
 
 @magics_class
@@ -67,12 +66,13 @@ class MongoDB(Magics, Configurable):
             return "[ERROR] connect mongodb before %insert"
         parsed = parse('%s\n%s' % (line, cell), self)
         try:
-            data = json.loads(parsed['data'])  # [TODO] single quota
+            data = insert_query_pymongo(parsed['data'])
             parsed['collection'].insert(data)
         except Exception as e:
             return "[ERROR] fail to insert data", e
 
     @line_magic('drop')
+    @cell_magic('drop')
     def drop(self, line):
         if not self._conn:
             return "[ERROR] connect mongodb before %delete"
@@ -105,8 +105,8 @@ class MongoDB(Magics, Configurable):
             return "[ERROR] connect mongodb before %find"
         parsed = parse('%s\n%s' % (line, cell), self)
         try:
-            query = query_pymongo(parsed['data'])
-            return print_cursor(parsed['collection'].find(json.loads(query.replace("'",'"'))))
+            query = find_query_pymongo(parsed['data'])
+            return print_cursor(parsed['collection'].find(query))
         except Exception as e:
             return "[ERROR] fail to query ", e
 

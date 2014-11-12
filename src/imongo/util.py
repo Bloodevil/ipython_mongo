@@ -1,6 +1,16 @@
 from pymongo.collection import Collection
 from pymongo.database import Database
-import re
+import json
+
+
+"""
+[TODO] - {test: 1}  -> dict {'test': 1}
+- {'test': 1} -> dict {'test': 1}
+- {"test": 1} -> dict {'test': 1}
+"""
+def dictize(query):
+    dictionary = json.loads(query.replace("'", '"'))
+    return dictionary
 
 
 def parse(cell, config):
@@ -20,8 +30,8 @@ def parse(cell, config):
             {data or data list}"""
     _db = Database(config._conn, db)
     _col = Collection(_db, col)
-    data = parts[1] if len(parts) > 1 else ''
-    return {'collection': _col, 'data': data.strip()}
+    data = parts[1].strip() if len(parts) > 1 else ''
+    return {'collection': _col, 'data': data}
 
 
 def print_json():
@@ -31,17 +41,71 @@ def print_json():
 def print_cursor(result):
     return list(result)
 
+
 """
 in mongo shell
 - {'name': /sometext/} -> {'name': {'$regex': 'sometext'}}
-- {name: /^pa/} -> {name: {$regex:^pa}}
-- {name: /ro$/} -> {name: {$regex:ro$}}
+- {name: /^pa/} -> {name: {$regex: '^pa'}}
+- {name: /ro$/} -> {name: {$regex: 'ro$'}}
 
 more easily
-- %find db.collection 3 < "field" < 10 -> {"field": { $lt : 10, $gt : 3 }}
-- %find db.collection 3 < "field" -> {"field": { $gt : 3 }}
+- %find db.collection {'field': > 3} -> {"field": { $gt : 3 }}
+- %find db.collection {'field': < 10} -> {"field": { $lt : 10 }}
+- %find db.collection {'field': <= 10} -> {"field": { $lte : 10 }}
+- %find db.collection {'field': < 10, 'field': >= 5} ->
+                      {"field": { $lt : 10, $gte : 5 }}
 """
+def query_parser(query):
+    tmp_query = query.replace('{', '').replace('}', '')
+    token_dict = {}
+    for q in tmp_query.split(','):
+        token_dict[q.split(':')[0]] = q.split(':')[1]
+    parsed_token = {}
+    for field, data in token_dict.iteritems():
+        field = str(field.strip())
+        data = data.strip()
+        if not data:
+            # [TODO] add not exist query.
+            continue
+        data = replace_slash(data)
+        data = replace_comp(data)
+        if not field in parsed_token.keys():
+            parsed_token[field] = data
+        if type(data) == dict:
+            parsed_token[field] = dict(parsed_token[field], **data)
+        else:
+            parsed_token[field] = data
+    parsed_query = '{'
+    parsed_query += ','.join(field+':'+str(data) for field, data in parsed_token.iteritems())
+    parsed_query += '}'
+    return parsed_query
 
+def check_type(data):
+    try:
+        data = int(data)
+    except:
+        data = str(data)
+    return data
+
+def replace_comp(data):
+    if data[0:2] in ['<=', '>=']:
+        op = data[0:2]
+        query = check_type(data[2:].strip())
+        if op == '>=':
+            data = {'$gte': query}
+        elif op == '<=':
+            data = {'$lte': query}
+    if data[0] in ['<', '>']:
+        op = data[0]
+        query = check_type(data[1:].strip())
+        if op == '<':
+            data = {'$lt': query}
+        elif op == '>':
+            data = {'$gt': query}
+    return data
+
+
+# query -> data
 def replace_slash(query):
     slash_list = []
     for i, q in enumerate(query):
@@ -61,6 +125,13 @@ def replace_slash(query):
         query = query.replace(r, regex_query%r[1:-1])
     return query
 
-def query_pymongo(raw_query):
-    query = replace_slash(raw_query)
+
+def find_query_pymongo(raw_query):
+    query = query_parser(raw_query)
+    query = dictize(query)
+    return query
+
+
+def insert_query_pymongo(raw_query):
+    query = dictize(raw_query)
     return query
