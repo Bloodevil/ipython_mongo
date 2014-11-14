@@ -56,10 +56,11 @@ more easily
                       {"field": { $lt : 10, $gte : 5 }}
 """
 def query_parser(query):
-    tmp_query = query.replace('{', '').replace('}', '')
+    tmp_query = query.replace('{', '').replace('}', '').strip()
     token_dict = {}
     for q in tmp_query.split(','):
-        token_dict[q.split(':')[0]] = q.split(':')[1]
+        if q.split(':').__len__() >= 2:
+            token_dict[q.split(':')[0]] = q.split(':')[1]
     parsed_token = {}
     for field, data in token_dict.iteritems():
         field = str(field.strip())
@@ -80,6 +81,7 @@ def query_parser(query):
     parsed_query += '}'
     return parsed_query
 
+
 def check_type(data):
     try:
         data = int(data)
@@ -87,6 +89,8 @@ def check_type(data):
         data = str(data)
     return data
 
+
+# [TODO] change starts with
 def replace_comp(data):
     if data[0:2] in ['<=', '>=']:
         op = data[0:2]

@@ -3,7 +3,7 @@ from imongo.imongo import MongoDB
 from nose import with_setup
 
 ip = get_ipython()
-mongo = 'localhost'
+mongo = '127.0.0.1'
 
 def setup():
     imongo = MongoDB(shell=ip)
@@ -15,9 +15,11 @@ def test_magic_find():
     assert ip.find_line_magic('help') != None
     assert ip.find_line_magic('print') != None
     assert ip.find_line_magic('insert') != None
+    assert ip.find_line_magic('find') != None
 
 def test_magic_not_found():
     assert ip.find_line_magic('test') == None
+    assert ip.find_line_magic('note_exist') == None
 
 def test_show_dbs_error():
     assert ip.run_line_magic('show_dbs', '') == "[ERROR] please connect to mongodb using %mongo_connect"
@@ -34,15 +36,30 @@ def test_print_error():
 
 def _init():
     ip.run_line_magic('mongo_connect', mongo)
-    ip.run_line_magic('insert', "ipython.test {'test': 1}")
+    ip.run_line_magic('insert', "imongo.test {'test': 1}")
 
 def _teardown():
-    ip.run_cell("conn = %mongo_connect %s", mongo)
-    ip.runcode("conn.ipython.test.drop()")
-    ip.run_line_magic('drop', "ipython")
+    ip.run_line_magic('drop', "imongo")
 
 @with_setup(_init, _teardown)
 def test_show_dbs():
-    assert 'ipython' in ip.run_line_magic('show_dbs', '')
+    assert 'imongo' in ip.run_line_magic('show_dbs', '')
+    assert 'test' in ip.run_line_magic('show_collections', 'imongo')
+
+## mongodb shell server core js test find1.js
+
+def test_find1():
+    ip.run_line_magic('mongo_connect', mongo)
+
+    ip.run_line_magic('insert', "imongo.find1 { 'a':1, 'b': 'hi' }")
+    ip.run_line_magic('insert', "imongo.find1 { 'a':2, 'b': 'hi' }")
+
+    assert ip.run_line_magic('find', 'imongo.find1 {}')[0]['a'] == 1
+    q = ip.run_line_magic('find', 'imongo.find1 {}')[0]
+    q['c'] = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+    ip.run_line_magic('insert', 'imongo.find1 ' + str(q))
+    assert ip.run_line_magic('find', 'imongo.find1 {}')[0]['a'] == 1
+    assert ip.run_line_magic('find', "imongo.find1 {'a':1}")[0]['b'] != None
+    _teardown()
 
 
