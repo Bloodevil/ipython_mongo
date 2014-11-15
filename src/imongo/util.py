@@ -57,10 +57,12 @@ more easily
 """
 def query_parser(query):
     tmp_query = query.replace('{', '').replace('}', '').strip()
+    if not tmp_query:
+        return '{}'
     token_dict = {}
     for q in tmp_query.split(','):
-        if q.split(':').__len__() >= 2:
-            token_dict[q.split(':')[0]] = q.split(':')[1]
+        k, v = q.split(':', 1)
+        token_dict[k] = v
     parsed_token = {}
     for field, data in token_dict.iteritems():
         field = str(field.strip())
@@ -71,18 +73,18 @@ def query_parser(query):
         data = replace_slash(data)
         data = replace_comp(data)
         if not field in parsed_token.keys():
-            parsed_token[field] = data
+            parsed_token.setdefault(field, data)
         if type(data) == dict:
-            parsed_token[field] = dict(parsed_token[field], **data)
+            parsed_token.setdefault(field, dict(parsed_token[field], **data))
         else:
-            parsed_token[field] = data
+            parsed_token.setdefault(field, data)
     parsed_query = '{'
     parsed_query += ','.join(field+':'+str(data) for field, data in parsed_token.iteritems())
     parsed_query += '}'
     return parsed_query
 
 
-def check_type(data):
+def cast_type(data):
     try:
         data = int(data)
     except:
@@ -94,14 +96,14 @@ def check_type(data):
 def replace_comp(data):
     if data[0:2] in ['<=', '>=']:
         op = data[0:2]
-        query = check_type(data[2:].strip())
+        query = cast_type(data[2:].strip())
         if op == '>=':
             data = {'$gte': query}
         elif op == '<=':
             data = {'$lte': query}
     if data[0] in ['<', '>']:
         op = data[0]
-        query = check_type(data[1:].strip())
+        query = cast_type(data[1:].strip())
         if op == '<':
             data = {'$lt': query}
         elif op == '>':
