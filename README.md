@@ -73,3 +73,35 @@ In [31]: conn.test.test.find_one()
 Out[31]: {u'_id': ObjectId('544a20e5eb5e7b1ccdb7ca54'), u'test': u'test'}
 ```
 
+%drop db.collection
+%drop db
+
+
+%find imongo.find1 {data}
+```
+In [9]: %find imongo.find1 {}
+Out[9]: [{u'_id': ObjectId('546d7192eb5e7b1cfbdf12cb'), u'test': u'abcdef'}]
+
+In [10]: %find imongo.find1 {'test': /c/}
+Out[10]: [{u'_id': ObjectId('546d7192eb5e7b1cfbdf12cb'), u'test': u'abcdef'}]
+
+In [11]: %find imongo.find1 {'test': /^a/}
+Out[11]: [{u'_id': ObjectId('546d7192eb5e7b1cfbdf12cb'), u'test': u'abcdef'}]
+
+In [17]: %find imongo.find1 {'test': /f$/}
+Out[17]: [{u'_id': ObjectId('546d7192eb5e7b1cfbdf12cb'), u'test': u'abcdef'}]
+
+In [21]: %find imongo.find1 {'test': > 120}
+Out[21]:
+[{u'_id': ObjectId('546d71f4eb5e7b1cfbdf12cc'), u'test': 123},
+ {u'_id': ObjectId('546d71fbeb5e7b1cfbdf12ce'), u'test': 1920}]
+
+In [22]: %find imongo.find1 {'test': < 120}
+Out[22]: [{u'_id': ObjectId('546d71f7eb5e7b1cfbdf12cd'), u'test': 100}]
+
+In [7]: %find imongo.find1 {'test': <= 100}
+Out[7]: [{u'_id': ObjectId('546d71f7eb5e7b1cfbdf12cd'), u'test': 100}]
+
+In [3]: %find imongo.find1 {'test': > 120, 'test': < 1000 }
+Out[3]: [{u'_id': ObjectId('546d71f4eb5e7b1cfbdf12cc'), u'test': 123}]
+```

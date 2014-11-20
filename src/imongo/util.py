@@ -75,7 +75,7 @@ def query_parser(query):
         if not field in parsed_token.keys():
             parsed_token.setdefault(field, data)
         if type(data) == dict:
-            parsed_token.setdefault(field, dict(parsed_token[field], **data))
+            parsed_token[field] = dict(parsed_token[field], **data)
         else:
             parsed_token.setdefault(field, data)
     parsed_query = '{'
@@ -94,21 +94,19 @@ def cast_type(data):
 
 # [TODO] change starts with
 def replace_comp(data):
-    if data[0:2] in ['<=', '>=']:
-        op = data[0:2]
-        query = cast_type(data[2:].strip())
-        if op == '>=':
-            data = {'$gte': query}
-        elif op == '<=':
-            data = {'$lte': query}
-    if data[0] in ['<', '>']:
-        op = data[0]
-        query = cast_type(data[1:].strip())
-        if op == '<':
-            data = {'$lt': query}
-        elif op == '>':
-            data = {'$gt': query}
-    return data
+    if data.startswith('<='):
+        q = '$lte'
+        data = data[2:].strip()
+    elif data.startswith('>='):
+        q = '$gte'
+        data = data[2:].strip()
+    elif data.startswith('<'):
+        q = '$lt'
+        data = data[1:].strip()
+    elif data.startswith('>'):
+        q = '$gt'
+        data = data[1:].strip()
+    return {q: cast_type(data)}
 
 
 # query -> data
