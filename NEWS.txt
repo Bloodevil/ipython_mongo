@@ -16,3 +16,13 @@ News
 
 * #7 new way to make autocomplete.
 * #9 insert data
+
+0.3
+---
+
+*Release date: 20-Nov-2014*
+
+* #17 make drop function for drop db or collection
+* #19 make find query
+* #20 find query support slash like query just like mongodb server shell.
+* #21, #23 find query support comparison query more easy way.
