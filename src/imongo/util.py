@@ -39,7 +39,10 @@ def print_json():
 
 
 def print_cursor(result):
-    return list(result)
+    if result:
+        return list(result)
+    else:
+        return result
 
 
 """
@@ -94,6 +97,7 @@ def cast_type(data):
 
 # [TODO] change starts with
 def replace_comp(data):
+    q = ''
     if data.startswith('<='):
         q = '$lte'
         data = data[2:].strip()
@@ -106,8 +110,10 @@ def replace_comp(data):
     elif data.startswith('>'):
         q = '$gt'
         data = data[1:].strip()
-    return {q: cast_type(data)}
-
+    if q:
+        return {q: cast_type(data)}
+    else:
+        return data
 
 # query -> data
 def replace_slash(query):
