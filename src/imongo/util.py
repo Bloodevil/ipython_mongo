@@ -1,6 +1,7 @@
 from pymongo.collection import Collection
 from pymongo.database import Database
 import json
+import pprint
 
 
 """
@@ -40,7 +41,7 @@ def print_json():
 
 def print_cursor(result):
     if result:
-        return list(result)
+        return pprint.pprint(list(result), width=1)
     else:
         return result
 
