@@ -41,18 +41,20 @@ class MongoDB(Magics, Configurable):
     @line_magic('show_dbs')
     def show_dbs(self, line):
         if self._conn:
+            print 'Pymongo> MongoClient(url).database_names()' # [TODO]
             return self._conn.database_names()
         else:
             return "[ERROR] please connect to mongodb using %mongo_connect"
 
     @line_magic('show_collections')
     def show_collections(self, line):
-        if self._conn and line:
-            collections = Database(self._conn, line).collection_names()
         if not line:
             return "[ERROR] usage %show_collections <dbname>"
         if not self._conn:
             return "[ERROR] connect mongodb before %show_collections"
+        if self._conn and line:
+            print "Pymongo> Database(%s, %s).collection_names()"%(str(self._conn), line)
+            collections = Database(self._conn, line).collection_names()
         if not collections:
             print "[ERROR] check your database name there no collection"
             collections = self.show_dbs(self)
