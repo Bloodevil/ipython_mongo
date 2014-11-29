@@ -78,7 +78,7 @@ Out[31]: {u'_id': ObjectId('544a20e5eb5e7b1ccdb7ca54'), u'test': u'test'}
 
 
 %find imongo.find1 {data}
-```
+```sql
 In [9]: %find imongo.find1 {}
 Out[9]: [{u'_id': ObjectId('546d7192eb5e7b1cfbdf12cb'), u'test': u'abcdef'}]
 
