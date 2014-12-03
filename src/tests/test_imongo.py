@@ -46,11 +46,12 @@ def test_show_dbs():
     assert 'imongo' in ip.run_line_magic('show_dbs', '')
     assert 'test' in ip.run_line_magic('show_collections', 'imongo')
 
-## mongodb shell server core js test find1.js
-
-def test_find1():
+def _init_find():
     ip.run_line_magic('mongo_connect', mongo)
 
+# mongodb shell server core js test find1.js
+@with_setup(_init_find)
+def test_find1():
     ip.run_line_magic('insert', "imongo.find1 { 'a':1, 'b': 'hi' }")
     ip.run_line_magic('insert', "imongo.find1 { 'a':2, 'b': 'hi' }")
 
@@ -62,4 +63,23 @@ def test_find1():
     assert ip.run_line_magic('find', "imongo.find1 {'a':1}")[0]['b'] != None
     _teardown()
 
+
+# mongodb shell server core js test find2.js
+@with_setup(_init_find, _teardown)
+def test_find2():
+    for x in xrange(3):
+        ip.run_line_magic('insert', "imongo.find2 {}")
+
+    f = ip.run_line_magic('find', 'imongo.find2 {}')
+    assert f[0]['_id'] < f[1]['_id']
+    assert f[1]['_id'] < f[2]['_id']
+
+
+def test_find3():
+    for x in xrange(50):
+        ip.run_line_magic('insert', "imongo.find3 { 'a' : %s }"%x)
+
+    f = ip.run_line_magic('find', 'imongo.find3 {}')
+    # f = ip.run_line_magic('find 20', 'imongo.find3 {}') limit 20
+    assert f.__len__() == 50
 
