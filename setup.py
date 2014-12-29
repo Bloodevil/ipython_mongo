@@ -1,4 +1,4 @@
-import os
+import os, sys
 try:
     from setuptools import setup, find_packages
 except ImportError:
@@ -12,12 +12,16 @@ except:
     README = 'https://github.com/Bloodevil/ipython_mongo/blob/master/README.md'
     NEWS = 'https://github.com/Bloodevil/ipython_mongo/blob/master/NEWS.txt'
 
-version = '0.3.2'
+version = '0.3.3'
 
 install_requires = [
     'ipython>=1.0',
     'pymongo>=2.7',
 ]
+
+extra = {}
+if sys.version_info >= (3,):
+    extra['use_2to3'] = True
 
 setup(name='ipython-mongo',
     version=version,
@@ -33,6 +37,7 @@ setup(name='ipython-mongo',
         'Topic :: Database',
         'Topic :: Database :: Front-Ends',
         'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
     ],
     keywords=['database', 'ipython', 'mongodb', 'shell', 'imongo'],
     author='Yeaji Shin',
