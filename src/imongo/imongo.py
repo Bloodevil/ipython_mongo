@@ -112,6 +112,20 @@ class MongoDB(Magics, Configurable):
         except Exception as e:
             return "[ERROR] fail to query ", e
 
+    # [TODO] should same return value when find and find_one command.
+    @line_magic('find_one')
+    @cell_magic('find_one')
+    def mongo_find_one(self, line, cell=''):
+        if not self._conn:
+            return "[ERROR] connect mongodb before %find"
+        parsed = parse('%s\n%s' % (line, cell), self)
+        try:
+            query = find_query_pymongo(parsed['data'])
+            return parsed['collection'].find_one(query)
+        except Exception as e:
+            return "[ERROR] fail to query ", e
+
+
     @line_magic('help')
     def help_message(self, line):
         message = ''
