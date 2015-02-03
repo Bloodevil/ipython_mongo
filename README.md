@@ -108,7 +108,14 @@ Out[3]: [{u'_id': ObjectId('546d71f4eb5e7b1cfbdf12cc'), u'test': 123}]
 ```
 
 %find_one imongo.find1 {data}
+```sql
+In [21]: %find imongo.find1 {'test': > 120}
+Out[21]: {u'_id': ObjectId('546d71f4eb5e7b1cfbdf12cc'), u'test': 123}
+```
 
 %count imongo.find1
-50
+```sql
+In [8]: %count imongo.find1
+Out[8]: 50
+```
 
