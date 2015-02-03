@@ -46,6 +46,7 @@ Out[3]: MongoClient(u'127.0.0.1', 27017)
 %show_dbs
 ```sql
 In [10]: %show_dbs
+Pymongo> MongoClient(url).database_names()
 Out[10]: 
 [u'local',
  u'tumblr',
@@ -105,3 +106,9 @@ Out[7]: [{u'_id': ObjectId('546d71f7eb5e7b1cfbdf12cd'), u'test': 100}]
 In [3]: %find imongo.find1 {'test': > 120, 'test': < 1000 }
 Out[3]: [{u'_id': ObjectId('546d71f4eb5e7b1cfbdf12cc'), u'test': 123}]
 ```
+
+%find_one imongo.find1 {data}
+
+%count imongo.find1
+50
+

@@ -41,7 +41,7 @@ class MongoDB(Magics, Configurable):
     @line_magic('show_dbs')
     def show_dbs(self, line):
         if self._conn:
-            print('Pymongo> MongoClient(url).database_names()') # [TODO]
+            print('Pymongo> '+str(self._conn)+'.database_names()') # [TODO]
             return self._conn.database_names()
         else:
             return "[ERROR] please connect to mongodb using %mongo_connect"
@@ -109,6 +109,17 @@ class MongoDB(Magics, Configurable):
         try:
             query = find_query_pymongo(parsed['data'])
             return print_cursor(parsed['collection'].find(query))
+        except Exception as e:
+            return "[ERROR] fail to query ", e
+
+    @line_magic('count')
+    @cell_magic('count')
+    def mongo_count(self, line, cell=''):
+        if not self._conn:
+            return "[ERROR] connect mongodb before %count"
+        parsed = parse('%s\n%s' % (line, cell), self)
+        try:
+            return parsed['collection'].count()
         except Exception as e:
             return "[ERROR] fail to query ", e
 
